@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from profiles_api.models import UserProfile
+from profiles_api import models
 
 class HelloSerializer(serializers.Serializer):
     """Serializers a name field for testing our APIView"""
@@ -10,7 +10,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     """Serializer a user profile object"""
 
     class Meta:
-        model = UserProfile
+        model = models.UserProfile
         fields = ('id', 'email', 'name', 'password')
         extra_kwargs = {
             'password': {
@@ -27,3 +27,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """Serializer for profile feed item"""
+
+    class Meta:
+        model = models.ProfileFeedItem
+        fields = ('id', 'user_profile', 'status_text', 'created_on')
+        extra_kwargs = {'user_profile': {'read_only': True}}
